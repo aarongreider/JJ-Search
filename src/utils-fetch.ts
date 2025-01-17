@@ -1,7 +1,7 @@
 
 const processURL = (): string => {
-    //const pathname = window.location.pathname;
-    const pathname = "https://junglejims.com/item-search-new/#key";
+    const pathname = window.location.pathname;
+    //const pathname = "https://junglejims.com/item-search-new/#key";
     const cleanPath = pathname.replace(/\//g, '');
 
     if (cleanPath) {
