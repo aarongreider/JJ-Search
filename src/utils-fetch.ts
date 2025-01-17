@@ -23,18 +23,19 @@ export const getRequestOptions = (): RequestInit => {
     myHeaders.append("api-key", processURL());
 
     const raw = JSON.stringify({
-        "queryType": "full",
+       /*  "queryType": "full",
         "search": "ovan liners",
         "searchMode": "all",
         "searchFields": "UPC,Description,Brand,Size,Department,Category,Keywords",
         "speller": "lexicon",
         "queryLanguage": "en-us",
         "count": true,
-        "top": 10
+        "top": 10 */
     });
 
     const requestOptions: RequestInit = {
-        method: "POST",
+        //method: "POST",
+        method: "GET",
         headers: myHeaders,
         body: raw,
         redirect: "follow"

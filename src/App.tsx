@@ -6,7 +6,7 @@ function App() {
   //const [data, setData] = useState()
 
   useEffect(() => {
-    console.log("version .1");
+    console.log("version .2");
     
     fetchData();
   }, [])
