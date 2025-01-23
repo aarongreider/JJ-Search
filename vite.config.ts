@@ -14,6 +14,15 @@ export default defineConfig(({ mode }) => {
           assetFileNames: 'style.css',
         }
       }
-    }
+    },
+    server: {
+      proxy: {
+        '/api': {
+          target: 'https://jjp-search.search.windows.net',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''),
+        },
+      },
+    },
   };
 });

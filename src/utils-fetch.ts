@@ -1,3 +1,4 @@
+export const PostType = { search: "Search", suggestor: "Suggestor" }
 
 const processURL = (): string => {
     const pathname = window.location.hash;
@@ -17,27 +18,43 @@ const processURL = (): string => {
     }
 }
 
-export const getRequestOptions = (): RequestInit => {
+export const getRequestOptions = (searchTerm: string, postType: string): RequestInit => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("api-key", processURL());
+    
+    let raw;
 
-    /* const raw = JSON.stringify({
-        "queryType": "full",
-        "search": "ovan liners",
-        "searchMode": "all",
-        "searchFields": "UPC,Description,Brand,Size,Department,Category,Keywords",
-        "speller": "lexicon",
-        "queryLanguage": "en-us",
-        "count": true,
-        "top": 10
-    }); */
+    if (postType == PostType.search) {
+        raw = JSON.stringify({
+            "queryType": "full",
+            "search": searchTerm,
+            "searchMode": "all",
+            "searchFields": "UPC,Description,Brand,Size,Department,Category,Keywords",
+            "speller": "lexicon",
+            "queryLanguage": "en-us",
+            "count": true,
+            "top": 1000
+        });
+    } else if (postType == PostType.suggestor) {
+        raw = JSON.stringify({
+            "filter": "",
+            "highlightPostTag": "</em>",
+            "highlightPreTag": "<em>",
+            "minimumCoverage": 80,
+            "orderby": "",
+            "search": searchTerm,
+            "searchFields": "Description",
+            "select": "UPC,Description,Brand,Department",
+            "suggesterName": "sg-itemsearch",
+            "top": 10
+          });
+    }
 
     const requestOptions: RequestInit = {
-        //method: "POST",
-        method: "GET",
+        method: "POST",
         headers: myHeaders,
-        //body: raw,
+        body: raw,
         redirect: "follow"
     };
 

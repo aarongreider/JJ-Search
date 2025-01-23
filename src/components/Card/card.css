@@ -1,0 +1,28 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 400px;
+  min-width: 250px;
+  max-width: 600px;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: none;
+  border: none;
+  font-family: "Alegreya Sans", Arial, Helvetica, sans-serif;
+}
+.card h2, .card h3, .card p, .card span {
+  margin: 0;
+  line-height: 1;
+}
+.card p {
+  font-weight: 500;
+}
+.card sup {
+  top: -3.5px;
+  margin-right: 1px;
+}
+.card .small {
+  font-size: 70%;
+}/*# sourceMappingURL=card.css.map */
