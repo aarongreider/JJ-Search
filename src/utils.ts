@@ -1,3 +1,4 @@
+import { render } from "react-dom";
 import { getRequestOptions, PostType } from "./utils-fetch";
 
 type DataFetch = {
@@ -66,4 +67,54 @@ export const sanitizeDepartmentOrCategory = (string: string) => {
         .replace(/\bFRZ\b/g, "FROZEN")
         .replace(/\b AND \b/g, " & ")
         .trim()
+}
+
+export const getimageURL = (department: string): string => {
+    let renderDept;
+
+    switch (department) {
+        case "TOBACCO & CIGARETTES":
+            renderDept = "Cigars"
+            break;
+        case "ORGANIC PRODUCE":
+            renderDept = "Produce"
+            break;
+        case "PET":
+            renderDept = "Pets"
+            break;
+        case "HBA":
+            renderDept = "HBA"
+            break;
+        case "WINE NON-FOOD":
+            renderDept = "Wine"
+            break;
+        case "HEALTH FOOD":
+            renderDept = "Health-Food"
+            break;
+        case "CHEESE SHOP":
+            renderDept = "Cheese"
+            break;
+        case "INTL PRODUCE":
+            renderDept = "International-Produce"
+            break;
+        case "FROZEN":
+            renderDept = "Dairy"
+            break;
+        case "MILK":
+            renderDept = "Dairy"
+            break;
+        case "EC RENTAL":
+            renderDept = "International"
+            break;
+        default: renderDept = toTitleCase(department)
+    }
+    return `https://junglejims.com/wp-content/uploads/Item-Search_${renderDept}.png`
+}
+
+const toTitleCase = (str: string) => {
+    return str
+        .toLowerCase() // Convert the entire string to lowercase
+        .split(' ')    // Split the string into an array of words
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+        .join(' ');    // Join the words back into a single string
 }

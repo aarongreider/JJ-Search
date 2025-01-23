@@ -1,35 +1,49 @@
 .card {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
+    flex-direction: row;
+    gap: 10px;
 
     width: 400px;
     min-width: 250px;
     max-width: 600px;
 
     background: white;
-    padding: 15px;
+    padding: 15px 15px 15px 10px;
     border-radius: 10px;
     box-shadow: none;
     border: none;
 
     font-family: "Alegreya Sans", Arial, Helvetica, sans-serif;
 
-    h2, h3, p, span {
-        margin: 0;
-        line-height: 1;
+
+    .deptIcon {
+        width: 90px;
     }
 
-    p {
-        font-weight: 500;
-    }
+    .cardText {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
 
-    sup {
-        top: -3.5px;
-        margin-right: 1px;
-    }
+        h2,
+        h3,
+        p,
+        span {
+            margin: 0;
+            line-height: 1;
+        }
 
-    .small {
-        font-size: 70%;
+        p {
+            font-weight: 500;
+        }
+
+        sup {
+            top: -3.5px;
+            margin-right: 1px;
+        }
+
+        .small {
+            font-size: 70%;
+        }
     }
 }

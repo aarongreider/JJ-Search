@@ -1,28 +1,39 @@
 .card {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  flex-direction: row;
+  gap: 10px;
   width: 400px;
   min-width: 250px;
   max-width: 600px;
   background: white;
-  padding: 15px;
+  padding: 15px 15px 15px 10px;
   border-radius: 10px;
   box-shadow: none;
   border: none;
   font-family: "Alegreya Sans", Arial, Helvetica, sans-serif;
 }
-.card h2, .card h3, .card p, .card span {
+.card .deptIcon {
+  width: 90px;
+}
+.card .cardText {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.card .cardText h2,
+.card .cardText h3,
+.card .cardText p,
+.card .cardText span {
   margin: 0;
   line-height: 1;
 }
-.card p {
+.card .cardText p {
   font-weight: 500;
 }
-.card sup {
+.card .cardText sup {
   top: -3.5px;
   margin-right: 1px;
 }
-.card .small {
+.card .cardText .small {
   font-size: 70%;
 }/*# sourceMappingURL=card.css.map */
