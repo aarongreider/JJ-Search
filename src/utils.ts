@@ -24,7 +24,12 @@ export type SearchResult = {
 export const getSearchData = async (searchTerm: string): Promise<SearchResult[]> => {
     try {
         //const response = await fetch("https://jjp-search.search.windows.net/indexes/jjsearchindex/docs/search?api-version=2024-11-01-preview", getRequestOptions());
-        const response = await fetch("/api/indexes/jjsearchindex/docs/search?api-version=2024-11-01-preview", getRequestOptions(searchTerm, PostType.search));
+        const response = await fetch(
+            import.meta.env.PROD ?
+                "https://jjp-search.search.windows.net/indexes/jjsearchindex/docs/search?api-version=2024-11-01-preview" :
+                "/api/indexes/jjsearchindex/docs/search?api-version=2024-11-01-preview",
+            getRequestOptions(searchTerm, PostType.search)
+        );
         const result = await response.text();
         const parsedResult: DataFetch = JSON.parse(result)
         console.log(parsedResult.value)
@@ -46,7 +51,12 @@ export type Suggestor = {
 export const getSuggestors = async (searchTerm: string): Promise<Suggestor[]> => {
     try {
         //const response = await fetch("https://jjp-search.search.windows.net/indexes/jjsearchindex/docs/search?api-version=2024-11-01-preview", getRequestOptions());
-        const response = await fetch("/api/indexes('jjsearchindex')/docs/search.post.suggest?api-version=2024-11-01-preview", getRequestOptions(searchTerm, PostType.suggestor));
+        const response = await fetch(
+            import.meta.env.PROD ?
+                "https://jjp-search.search.windows.net/indexes('jjsearchindex')/docs/search.post.suggest?api-version=2024-11-01-preview" :
+                "/api/indexes('jjsearchindex')/docs/search.post.suggest?api-version=2024-11-01-preview",
+            getRequestOptions(searchTerm, PostType.suggestor)
+        );
         const result = await response.text();
         const parsedResult: DataFetch = JSON.parse(result)
         console.log(parsedResult.value)

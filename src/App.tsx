@@ -111,7 +111,7 @@ function App() {
           {resultsLoaded ? searchResults.map((result, index) => {
             return <Card key={index} searchResult={result}></Card>
           }) :
-            <img src='public/soup.gif' style={{
+            <img src='https://junglejims.com/wp-content/uploads/soup.gif' style={{
               width: "40px",
               filter: `
                 drop-shadow(0 2px 1px rgba(0, 0, 0, 0.4)) 
