@@ -1,8 +1,8 @@
-.card {
+.resultCard {
   display: flex;
   flex-direction: row;
   gap: 10px;
-  width: 400px;
+  width: 100%;
   min-width: 250px;
   max-width: 600px;
   background: white;
@@ -12,36 +12,39 @@
   border: none;
   font-family: "Alegreya Sans", Arial, Helvetica, sans-serif;
 }
-.card .deptIcon {
+.resultCard .deptIcon {
   width: 90px;
 }
-.card .cardText {
+.resultCard .cardText {
   display: flex;
   flex-direction: column;
   gap: 5px;
   width: 100%;
 }
-.card .cardText h2,
-.card .cardText h3,
-.card .cardText p,
-.card .cardText span {
+.resultCard .cardText h2,
+.resultCard .cardText h3,
+.resultCard .cardText p,
+.resultCard .cardText span {
   margin: 0;
   line-height: 1;
 }
-.card .cardText p {
+.resultCard .cardText h2 {
+  font-size: 26px;
+}
+.resultCard .cardText p {
   font-weight: 500;
 }
-.card .cardText sup {
+.resultCard .cardText sup {
   top: -3.5px;
   margin-right: 1px;
 }
-.card .cardText .small {
+.resultCard .cardText .small {
   font-size: 70%;
 }
-.card .cardText .flex {
+.resultCard .cardText .flex {
   width: 100%;
 }
-.card .cardText .flex .stockIndicator {
+.resultCard .cardText .flex .stockIndicator {
   /* position: absolute;
   bottom: -2%;
   left: -3%; */

@@ -55,7 +55,7 @@ export const getRequestOptions = (searchTerm: string, postType: string): Request
         method: "POST",
         headers: myHeaders,
         body: raw,
-        redirect: "follow"
+        redirect: "follow",
     };
 
     return requestOptions

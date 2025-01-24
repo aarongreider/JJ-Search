@@ -1,9 +1,9 @@
-.card {
+.resultCard {
     display: flex;
     flex-direction: row;
     gap: 10px;
 
-    width: 400px;
+    width: 100%;
     min-width: 250px;
     max-width: 600px;
 
@@ -33,6 +33,10 @@
             margin: 0;
             line-height: 1;
             //color: #4e3111;
+        }
+
+        h2 {
+            font-size: 26px;
         }
 
         p {

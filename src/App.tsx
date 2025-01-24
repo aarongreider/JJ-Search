@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { getSearchData, getSuggestors, SearchResult, Suggestor } from './utils'
+import { getSearchData, getSuggestors, SearchResult, setDevelopmentStyles, Suggestor } from './utils'
 import { Card } from './components/Card/Card'
 import './App.css'
 
@@ -13,7 +13,8 @@ function App() {
   const searchBar = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    console.log("version .4");
+    import.meta.env.PROD ? undefined : setDevelopmentStyles()
+    console.log("version .5");
     fetchSearchResult()
   }, [])
 

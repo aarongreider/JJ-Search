@@ -127,3 +127,34 @@ const toTitleCase = (str: string) => {
         .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
         .join(' ');    // Join the words back into a single string
 }
+
+
+
+
+export const setDevelopmentStyles = () => {
+    const DevelopmentStyles = [
+        '<link rel="stylesheet" href="./src/Default CSS/907ce8a0_ai1ec_parsed_css.css">',
+        '<link rel="stylesheet" href="./src/Default CSS/ajax-load-more.min.css">',
+        '<link rel="stylesheet" href="./src/Default CSS/all.css">',
+        '<link rel="stylesheet" href="./src/Default CSS/bootstrap.min.css">',
+        '<link rel="stylesheet" href="./src/Default CSS/calendar.css">',
+        '<link rel="stylesheet" href="./src/Default CSS/czo1ptk.css">',
+        '<link rel="stylesheet" href="./src/Default CSS/item-search-frontend.css">',
+        '<link rel="stylesheet" href="./src/Default CSS/jquery.fancybox.css">',
+        '<link rel="stylesheet" href="./src/Default CSS/jquery.fancybox.min.css">',
+        '<link rel="stylesheet" href="./src/Default CSS/js_composer.min.css">',
+        '<link rel="stylesheet" href="./src/Default CSS/perfect-columns.css">',
+        '<link rel="stylesheet" href="./src/Default CSS/print.min.css">',
+        '<link rel="stylesheet" href="./src/Default CSS/style-wp.css">',
+        '<link rel="stylesheet" href="./src/Default CSS/style.css">',
+        '<link rel="stylesheet" href="./src/Default CSS/style2.css">',
+        '<link rel="stylesheet" href="./src/Default CSS/styles__ltr.css">',
+        '<link rel="stylesheet" href="./src/Default CSS/styles.css">',
+        '<link rel="stylesheet" href="./src/Default CSS/v4-shims.css">',
+    ]
+    DevelopmentStyles.forEach(style => {
+        const template = document.createElement('template');
+        template.innerHTML = style.trim(); // Avoid whitespace issues
+        document.head.appendChild(template.content);
+    });
+}

@@ -10,7 +10,7 @@ export function Card({ searchResult }: CardProps) {
     return <>
         {
             !searchResult.FF_InStock && !searchResult.EG_InStock ? undefined :
-                <div className="card">
+                <div className="resultCard">
 
                     {/* DEPT ICON */}
                     <img className="deptIcon" src={getimageURL(searchResult.Department)}></img>
