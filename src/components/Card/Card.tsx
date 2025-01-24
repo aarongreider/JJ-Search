@@ -8,27 +8,54 @@ interface CardProps {
 
 export function Card({ searchResult }: CardProps) {
     return <>
-        <div className="card">
-            <img className="deptIcon" src={getimageURL(searchResult.Department)}></img>
-            <div className="cardText">
-                <p>{searchResult.Brand}</p>
-                <h2 style={{ textTransform: "capitalize" }}>{searchResult.Description.toLocaleLowerCase()}</h2>
-                <p style={{ display: "flex", alignItems: "flex-end", transform: "translateX(-5px)" }}>
-                    <span className="material-symbols-outlined" style={{ fontWeight: 300, fontSize: '20px' }}>location_on</span>
-                    {sanitizeDepartmentOrCategory(searchResult.Department)}
-                    {(searchResult.Category && searchResult.Department && searchResult.Category !== searchResult.Department) ?
-                        <span>
-                            &nbsp;/&nbsp;
-                            {sanitizeDepartmentOrCategory(searchResult.Category)}
-                        </span>
-                        : undefined}
-                </p>
-                <h2 style={{ letterSpacing: "-.5px" }}>
-                    <sup>$</sup>
-                    {searchResult.FF_RetailPrice}
-                    {(searchResult.Size && !searchResult.Size.toLocaleLowerCase().includes("n/a")) ? <span className="small"> / {searchResult.Size.toLocaleLowerCase()}</span> : undefined}
-                </h2>
-            </div>
-        </div>
+        {
+            !searchResult.FF_InStock && !searchResult.EG_InStock ? undefined :
+                <div className="card">
+
+                    {/* DEPT ICON */}
+                    <img className="deptIcon" src={getimageURL(searchResult.Department)}></img>
+
+                    {/* SEARCH RESULT DETAILS */}
+                    <div className="cardText">
+                        <div className="flex" style={{ display: 'flex', alignItems: 'center', justifyContent: "space-between" }}>
+
+                            {/* BRAND */}
+                            <p>{searchResult.Brand}</p>
+
+                            {/* IN STOCK INDICATOR */}
+                            {(searchResult.FF_InStock && searchResult.EG_InStock) ?
+                                undefined : searchResult.FF_InStock ?
+                                    <p className="stockIndicator" style={{ background: 'rgb(75 156 64)' }}>FF Only</p> : searchResult.EG_InStock ?
+                                        <p className="stockIndicator" style={{ background: 'rgb(225 154 4)' }}>EG Only</p> : undefined
+                            }
+                        </div>
+
+                        {/* DESCRIPTION */}
+                        <h2 style={{ textTransform: "capitalize" }}>{searchResult.Description.toLocaleLowerCase()}</h2>
+
+                        {/* DEPARTMENT AND CATEGORY */}
+                        <p style={{ display: "flex", alignItems: "flex-start", transform: "translateX(-5px) translateY(2px)" }}>
+                            <span className="material-symbols-outlined" style={{ fontWeight: 300, fontSize: '20px', transform: 'translateY(-3.5px)' }}>location_on</span>
+                            {sanitizeDepartmentOrCategory(searchResult.Department)}
+                            {(searchResult.Category && searchResult.Department && searchResult.Category !== searchResult.Department) ?
+                                <>
+                                    &nbsp;/&nbsp;
+                                    {sanitizeDepartmentOrCategory(searchResult.Category)}
+                                </>
+                                : undefined}
+                        </p>
+
+                        {/* PRICE AND SIZE */}
+                        <h2 style={{ letterSpacing: "-.5px" }}>
+                            <sup>$</sup>
+                            {searchResult.FF_RetailPrice}
+                            {(searchResult.Size && !searchResult.Size.toLocaleLowerCase().includes("n/a")) ?
+                                <span className="small"> / {searchResult.Size.toLocaleLowerCase()}</span>
+                                : undefined
+                            }
+                        </h2>
+                    </div>
+                </div>
+        }
     </>
 }

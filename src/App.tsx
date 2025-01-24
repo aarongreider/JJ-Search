@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { getSearchData, getSuggestors, SearchResult, Suggestor } from './utils'
 import { Card } from './components/Card/Card'
+import './App.css'
 
 function App() {
   const [resultsLoaded, setResultsLoaded] = useState<boolean>(false)
@@ -9,6 +10,7 @@ function App() {
   const [searchResults, setSearchResult] = useState<SearchResult[]>([])
   const [suggestors, setSuggestors] = useState<Suggestor[]>([])
   const [displaySuggestors, setDisplaySuggestors] = useState<boolean>(false)
+  const searchBar = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     console.log("version .4");
@@ -17,6 +19,10 @@ function App() {
 
   useEffect(() => {
     fetchSearchResult()
+    setDisplaySuggestors(false)
+    if (searchBar.current) {
+      searchBar.current.blur()
+    }
   }, [triggerSearch])
 
   useEffect(() => {
@@ -48,46 +54,62 @@ function App() {
   }
 
   const selectSuggestor = (suggestor: Suggestor) => {
-    setSearchQuery(suggestor.Description)
+    setSearchQuery(suggestor.Description.toLocaleLowerCase())
     setTriggerSearch(!triggerSearch)
   }
 
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', position: 'relative' }}>
 
         {/* SEARCH BAR */}
-        <div className='inputWrapper' style={{display:'flex', alignItems:'center', gap: '3px', background:"white", borderRadius: "10px", padding: "5px"}}>
-          <span className="material-symbols-outlined">search</span>
-          <input type="text" style={{background:"none", border: "none", width: '100%'}}
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" ? setTriggerSearch(!triggerSearch) : undefined}
-            onFocus={() => { setDisplaySuggestors(true) }}
-            onBlur={() => setTimeout(() => { setDisplaySuggestors(false) }, 200)}
-          />
-          <span className="material-symbols-outlined" onClick={()=>{setSearchQuery(""); setSuggestors([])}}>close</span>
-        </div>
+        <div className='inputWrapper' style={{ paddingBottom: `${displaySuggestors ? '15px' : 0}` }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '3px', width: '100%', position: 'relative', marginBottom: `${displaySuggestors ? '5px' : 0}` }}>
+            <span className="material-symbols-outlined" style={{ cursor: 'default' }}>search</span>
+            <input type="text" ref={searchBar} style={{ background: "none", border: "none", outline: 'none', width: '100%', paddingLeft: '2px' }}
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" ? setTriggerSearch(!triggerSearch) : undefined}
+              onFocus={() => { setDisplaySuggestors(true) }}
+              onBlur={() => setTimeout(() => { setDisplaySuggestors(false) }, 200)}
+            />
+            <span className="material-symbols-outlined" style={{ cursor: 'pointer' }} onClick={() => { setSearchQuery(""); setSuggestors([]) }}>close</span>
+            {displaySuggestors && <hr />}
+          </div>
 
-        {/* SUGGESTORS */}
-        <div style={{ display: 'flex', gap: '10px' }}>
-          {displaySuggestors ? suggestors.map((suggestor, index) => {
-            return <>
-              <button key={index} onClick={() => {
-                selectSuggestor(suggestor)
-              }}>
-                {suggestor.Description}
-              </button>
-            </>
-          }) : undefined
-          }
+
+
+
+          {/* SUGGESTORS */}
+          <ul className='suggestorContainer' style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
+            {displaySuggestors ? suggestors.map((suggestor, index) => {
+              return <>
+                <li key={index} style={{ display: 'flex', alignItems: 'center', gap: '3px', width: '100%' }} onClick={() => {
+                  selectSuggestor(suggestor)
+                }}>
+                  <span style={{ color: 'rgb(172, 172, 172)' }} className="material-symbols-outlined">search</span>
+                  <button key={index} className="suggestor" style={{ whiteSpace: "nowrap" }}
+                    dangerouslySetInnerHTML={{
+                      __html: suggestor['@search.text'],
+                    }} />
+                  <span className='suggestorBrand'>{suggestor.Brand.toLocaleLowerCase()}</span>
+                </li>
+              </>
+            }) : undefined
+            }
+          </ul>
         </div>
+        
+        {/* NUMBER OF RESULTS */}
+        <p style={{width: '100%', textAlign: 'right', margin: 0, padding: '0 6px'}}>
+          {searchResults.length} Results. {searchResults.filter((result) => result.FF_InStock === false && result.EG_InStock === false).length} Items Out of Stock.
+          </p>
 
         {/* SEARCH RESULTS */}
-        <div style={{display:'flex', flexDirection: 'column', gap: '10px'}}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {resultsLoaded ? searchResults.map((result, index) => {
-            return <Card searchResult={result}></Card>
+            return <Card key={index} searchResult={result}></Card>
           }) :
             <img src='public/soup.gif' style={{
               width: "40px",

@@ -1,42 +1,62 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.inputWrapper {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: white;
+  border-radius: 10px;
+  padding: 5px;
+  width: 100%;
+}
+.inputWrapper hr {
+  width: 100%;
+  height: 1px;
+  margin: 0;
+  position: absolute;
+  bottom: -2px;
+  background: #e8e8e8;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+ul.suggestorContainer {
+  border-radius: 10px;
+  padding: 0;
+  margin: 0;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+ul.suggestorContainer :hover {
+  background: rgba(0, 0, 0, 0.1);
 }
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+ul.suggestorContainer li {
+  width: 100%;
+  padding: 0;
+  padding-left: 2px;
 }
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+ul.suggestorContainer li button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0;
+  text-transform: lowercase;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+ul.suggestorContainer li :hover {
+  background: none;
 }
-
-.card {
-  padding: 2em;
+ul.suggestorContainer li em {
+  font-style: normal;
+  font-weight: 900;
 }
-
-.read-the-docs {
-  color: #888;
-}
+ul.suggestorContainer li .suggestorBrand {
+  text-align: right;
+  width: 100%;
+  font-style: italic;
+  text-transform: capitalize;
+  color: grey;
+  font-size: 90%;
+  font-weight: 500;
+  letter-spacing: -0.35px;
+}/*# sourceMappingURL=App.css.map */
