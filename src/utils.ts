@@ -1,4 +1,3 @@
-import { render } from "react-dom";
 import { getRequestOptions, PostType } from "./utils-fetch";
 
 type DataFetch = {
