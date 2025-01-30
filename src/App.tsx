@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { getSearchData, getSuggestors, SearchResult, setDevelopmentStyles, Suggestor } from './utils'
+import { getSearchData, getSuggestors, SearchResult, setDevelopmentStyles, setWPStyles, Suggestor } from './utils'
 import { Card } from './components/Card/Card'
 import './App.css'
+import { filterDepartment, filterStore, sortItems } from './utils-filter'
 
 function App() {
   const [resultsLoaded, setResultsLoaded] = useState<boolean>(false)
@@ -10,11 +11,15 @@ function App() {
   const [searchResults, setSearchResult] = useState<SearchResult[]>([])
   const [suggestors, setSuggestors] = useState<Suggestor[]>([])
   const [displaySuggestors, setDisplaySuggestors] = useState<boolean>(false)
+  const [sortQuery, setSortQuery] = useState<string>("")
+  const [filterDept, setFilterDept] = useState<string>("")
+  const [storeQuery, setStoreQuery] = useState<string>("")
   const searchBar = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     import.meta.env.PROD ? undefined : setDevelopmentStyles()
-    console.log("version .5");
+    console.log("version .6");
+    setTimeout(setWPStyles, 500);
     fetchSearchResult()
   }, [])
 
@@ -59,6 +64,10 @@ function App() {
     setTriggerSearch(!triggerSearch)
   }
 
+  const orderItems = (items: SearchResult[]): SearchResult[] => {
+    return sortItems(filterStore(filterDepartment(items)), sortQuery)
+  }
+
   return (
     <>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', position: 'relative' }}>
@@ -101,23 +110,68 @@ function App() {
             }
           </ul>
         </div>
-        
-        {/* NUMBER OF RESULTS */}
-        <p style={{width: '100%', textAlign: 'right', margin: 0, padding: '0 6px'}}>
-          {searchResults.length} Results. {searchResults.filter((result) => result.FF_InStock === false && result.EG_InStock === false).length} Items Out of Stock.
-          </p>
 
-        {/* SEARCH RESULTS */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          {resultsLoaded ? searchResults.map((result, index) => {
-            return <Card key={index} searchResult={result}></Card>
-          }) :
-            <img src='https://junglejims.com/wp-content/uploads/soup.gif' style={{
-              width: "40px",
-              filter: `
-                drop-shadow(0 2px 1px rgba(0, 0, 0, 0.4)) 
-                drop-shadow(1px 4px 5px rgba(0, 0, 0, 0.2))`
-            }} />}
+        {/* NUMBER OF RESULTS */}
+        <p style={{ width: '100%', textAlign: 'right', margin: 0, padding: '0 6px' }}>
+          {searchResults.length} Results. {searchResults.filter((result) => result.FF_InStock === false && result.EG_InStock === false).length} Items Out of Stock.
+        </p>
+
+        {/* RESULTS AND FILTERING */}
+        <div style={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
+
+          {/* SEARCH RESULTS */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {resultsLoaded ? orderItems(searchResults).map((result, index) => {
+              return <Card key={index} searchResult={result}></Card>
+            }) :
+              <img src='https://junglejims.com/wp-content/uploads/soup.gif' style={{
+                width: "40px",
+                filter: `
+                  drop-shadow(0 2px 1px rgba(0, 0, 0, 0.4))
+                  drop-shadow(1px 4px 5px rgba(0, 0, 0, 0.2))`
+              }} />}
+          </div>
+
+          {/* FILTERING */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <select>
+              <option value="">Relevance</option>
+              <option value="price descending">Most $</option>
+              <option value="price ascending">Least $</option>
+              <option value="alphabetically">A-Z</option>
+            </select>
+            <select>
+              <option value="">Both Stores</option>
+              <option value="FF">Fairfield</option>
+              <option value="EG">Eastgate</option>
+            </select>
+            <select>
+              <option value="">All Departments</option>
+              <option value="Bakery">Bakery</option>
+              <option value="Beer">Beer</option>
+              <option value="Candy">Candy</option>
+              <option value="Cheese">Cheese</option>
+              <option value="Cigars">Cigars</option>
+              <option value="Cookware">Cookware</option>
+              <option value="Dairy">Dairy</option>
+              <option value="Deli">Deli</option>
+              <option value="Grocery">Grocery</option>
+              <option value="HBA<">HBA</option>
+              <option value="Supplements">Supplements</option>
+              <option value="International">International</option>
+              <option value="Liquor">Liquor</option>
+              <option value="Meat">Meat</option>
+              <option value="Health Food">Health Food</option>
+              <option value="Olive Bar">Olive Bar</option>
+              <option value="Pets">Pets</option>
+              <option value="Produce">Produce</option>
+              <option value="Seafood">Seafood</option>
+              <option value="Pop">Pop</option>
+              <option value="Wine">Wine</option>
+              <option value="International Produce">International Produce</option>
+              <option value="Toys">Toys</option>
+            </select>
+          </div>
         </div>
       </div>
     </>

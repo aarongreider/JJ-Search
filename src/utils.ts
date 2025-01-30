@@ -129,8 +129,6 @@ const toTitleCase = (str: string) => {
 }
 
 
-
-
 export const setDevelopmentStyles = () => {
     const DevelopmentStyles = [
         '<link rel="stylesheet" href="./src/Default CSS/907ce8a0_ai1ec_parsed_css.css">',
@@ -157,4 +155,42 @@ export const setDevelopmentStyles = () => {
         template.innerHTML = style.trim(); // Avoid whitespace issues
         document.head.appendChild(template.content);
     });
+}
+
+export const setWPStyles = () => {
+
+    // get scrollbar width
+    const scrollbarWidth = document.documentElement.clientWidth - window.innerWidth
+
+    // brute force the correct widths and overflow properties
+    const wrapper: HTMLDivElement | null = document.getElementById('wrapper') as HTMLDivElement
+    const root: HTMLDivElement | null = document.getElementById("root") as HTMLDivElement
+    const btn: HTMLLinkElement | null = document.querySelector("#header > div > div.header-holder > div.sub-nav > a")
+    const header: HTMLLinkElement | null = document.querySelector("#header")
+
+    const wrapperStyle = {
+        overflow: 'visible',
+        width: `calc(100svw + ${scrollbarWidth}px)`
+    }
+    const rootStyle = {
+        width: `calc(100svw + ${scrollbarWidth}px)`
+    }
+
+    const btnStyle = {
+        width: 'auto',
+        whiteSpace: 'normal', // Equivalent to text wrapping
+        overflow: 'visible'
+    };
+
+    const navStyle = {
+        position: 'relative',
+        zIndex: 101,
+    };
+
+    // Apply each style from the object to the element
+    wrapper && Object.assign(wrapper.style, wrapperStyle);
+    root && Object.assign(root.style, rootStyle);
+    btn && Object.assign(btn.style, btnStyle);
+    header && Object.assign(header.style, navStyle);
+
 }
