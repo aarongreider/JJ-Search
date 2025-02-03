@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { getSearchData, getSuggestors, SearchResult, setDevelopmentStyles, setWPStyles, Suggestor } from './utils'
 import { Card } from './components/Card/Card'
 import './App.css'
-import { filterDepartment, filterStore, sortItems } from './utils-filter'
+import { filterByStock, filterByDepartment, filterByStore, sortItems } from './utils-filter'
 
 function App() {
   const [resultsLoaded, setResultsLoaded] = useState<boolean>(false)
@@ -12,8 +12,9 @@ function App() {
   const [suggestors, setSuggestors] = useState<Suggestor[]>([])
   const [displaySuggestors, setDisplaySuggestors] = useState<boolean>(false)
   const [sortQuery, setSortQuery] = useState<string>("")
-  const [filterDept, setFilterDept] = useState<string>("")
+  const [deptQuery, setDeptQuery] = useState<string>("")
   const [storeQuery, setStoreQuery] = useState<string>("")
+  const [showOutOfStock, setShowOutOfStock] = useState<boolean>(false)
   const searchBar = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -36,6 +37,7 @@ function App() {
       fetchSuggestors()
     }
   }, [searchQuery])
+
 
   const fetchSearchResult = async () => {
     try {
@@ -65,7 +67,7 @@ function App() {
   }
 
   const orderItems = (items: SearchResult[]): SearchResult[] => {
-    return sortItems(filterStore(filterDepartment(items)), sortQuery)
+    return sortItems(filterByStore(filterByDepartment(filterByStock(items, showOutOfStock), deptQuery), storeQuery), sortQuery)
   }
 
   return (
@@ -111,69 +113,56 @@ function App() {
           </ul>
         </div>
 
+        {/* FILTERING */}
+        <div style={{ display: 'flex', flexDirection: 'row-reverse', gap: '10px', flexWrap: 'wrap', justifyContent: 'flex-end', }}>
+          {/* SORT */}
+          <select onChange={(e) => { setSortQuery(e.currentTarget.value) }}>
+            <option value="">Relevance</option>
+            <option value="price descending">Most $</option>
+            <option value="price ascending">Least $</option>
+            <option value="alphabetically">A-Z</option>
+          </select>
+          {/* FILTER STORE */}
+          <select onChange={(e) => { setStoreQuery(e.currentTarget.value); setShowOutOfStock(false) }}>
+            <option value="">Both Stores</option>
+            <option value="FF">Fairfield</option>
+            <option value="EG">Eastgate</option>
+          </select>
+          {/* FILTER DEPARTMENT */}
+          <select onChange={(e) => { setDeptQuery(e.currentTarget.value) }}>
+            <option value="">All Departments</option>
+            {[...new Set(searchResults.map(item => item.Department))].map((department, index) => { return <option key={index} value={department}>{department}</option> })}
+          </select>
+          {/* TOGGLE SOLD OUT */}
+          <div className={`checkbox ${storeQuery ? "disabled" : ""}`} style={{ width: '100%', display: 'flex', flexDirection: 'row', gap: '10px', flexWrap: 'wrap', alignItems: 'center', justifyContent: "flex-end" }}>
+            <p style={{margin: 0}}>Show Out of Stock</p>
+            <input type='checkbox'
+              disabled={storeQuery ? true : false}
+              checked={showOutOfStock}
+              onChange={(e) => { setShowOutOfStock(e.currentTarget.checked) }}>
+            </input>
+          </div>
+        </div>
+
         {/* NUMBER OF RESULTS */}
         <p style={{ width: '100%', textAlign: 'right', margin: 0, padding: '0 6px' }}>
           {searchResults.length} Results. {searchResults.filter((result) => result.FF_InStock === false && result.EG_InStock === false).length} Items Out of Stock.
         </p>
 
-        {/* RESULTS AND FILTERING */}
-        <div style={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
-
-          {/* SEARCH RESULTS */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {resultsLoaded ? orderItems(searchResults).map((result, index) => {
-              return <Card key={index} searchResult={result}></Card>
-            }) :
-              <img src='https://junglejims.com/wp-content/uploads/soup.gif' style={{
-                width: "40px",
-                filter: `
+        {/* SEARCH RESULTS */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
+          {resultsLoaded ? orderItems(searchResults).map((result, index) => {
+            return <Card key={index} searchResult={result}></Card>
+          }) :
+            <img src='https://junglejims.com/wp-content/uploads/soup.gif' style={{
+              width: "40px",
+              filter: `
                   drop-shadow(0 2px 1px rgba(0, 0, 0, 0.4))
                   drop-shadow(1px 4px 5px rgba(0, 0, 0, 0.2))`
-              }} />}
-          </div>
-
-          {/* FILTERING */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <select>
-              <option value="">Relevance</option>
-              <option value="price descending">Most $</option>
-              <option value="price ascending">Least $</option>
-              <option value="alphabetically">A-Z</option>
-            </select>
-            <select>
-              <option value="">Both Stores</option>
-              <option value="FF">Fairfield</option>
-              <option value="EG">Eastgate</option>
-            </select>
-            <select>
-              <option value="">All Departments</option>
-              <option value="Bakery">Bakery</option>
-              <option value="Beer">Beer</option>
-              <option value="Candy">Candy</option>
-              <option value="Cheese">Cheese</option>
-              <option value="Cigars">Cigars</option>
-              <option value="Cookware">Cookware</option>
-              <option value="Dairy">Dairy</option>
-              <option value="Deli">Deli</option>
-              <option value="Grocery">Grocery</option>
-              <option value="HBA<">HBA</option>
-              <option value="Supplements">Supplements</option>
-              <option value="International">International</option>
-              <option value="Liquor">Liquor</option>
-              <option value="Meat">Meat</option>
-              <option value="Health Food">Health Food</option>
-              <option value="Olive Bar">Olive Bar</option>
-              <option value="Pets">Pets</option>
-              <option value="Produce">Produce</option>
-              <option value="Seafood">Seafood</option>
-              <option value="Pop">Pop</option>
-              <option value="Wine">Wine</option>
-              <option value="International Produce">International Produce</option>
-              <option value="Toys">Toys</option>
-            </select>
-          </div>
+            }} />}
         </div>
       </div>
+
     </>
   )
 }

@@ -1,14 +1,43 @@
 import { SearchResult } from './utils'
 
-export const filterStore = (items: SearchResult[]): SearchResult[] => {
-    return items
+export const filterByStore = (items: SearchResult[], filterQuery: string): SearchResult[] => {
+    if (filterQuery) {
+        if (filterQuery == "Fairfield") {
+            return items.filter((item) => {
+                return (item.FF_InStock);
+            })
+        } else {
+            return items.filter((item) => {
+                return (item.EG_InStock);
+            })
+        }
+    } else {
+        return items
+    }
 }
-export const filterDepartment = (items: SearchResult[]): SearchResult[] => {
+export const filterByStock = (items: SearchResult[], showOutOfStock: boolean): SearchResult[] => {
+    if (!showOutOfStock) {
+        return items.filter((item) => {
+            return (item.FF_InStock || item.EG_InStock);
+        })
+    }
     return items
 }
 
+export const filterByDepartment = (items: SearchResult[], filterQuery: string): SearchResult[] => {
+    if (filterQuery) {
+        return items.filter((item) => {
+            return (
+                `${item.Department}`.includes(filterQuery)
+            );
+        })
+    } else {
+        return items
+    }
+}
+
 export const sortItems = (items: SearchResult[], sortQuery: string): SearchResult[] => {
-    
+
     if (sortQuery === '') {
         return items
     } else {

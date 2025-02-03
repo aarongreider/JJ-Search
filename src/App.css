@@ -64,4 +64,16 @@ ul.suggestorContainer li .suggestorBrand {
   font-size: 90%;
   font-weight: 500;
   letter-spacing: -0.35px;
+}
+
+.checkbox {
+  background: white;
+  padding: 5px;
+}
+.checkbox.disabled {
+  background-color: rgb(219, 211, 199);
+  color: rgb(107, 99, 86);
+}
+.checkbox.disabled p {
+  color: grey;
 }/*# sourceMappingURL=App.css.map */
