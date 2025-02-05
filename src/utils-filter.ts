@@ -1,20 +1,18 @@
 import { SearchResult } from './utils'
 
 export const filterByStore = (items: SearchResult[], filterQuery: string): SearchResult[] => {
-    if (filterQuery) {
-        if (filterQuery == "Fairfield") {
-            return items.filter((item) => {
-                return (item.FF_InStock);
-            })
-        } else {
-            return items.filter((item) => {
-                return (item.EG_InStock);
-            })
-        }
-    } else {
-        return items
-    }
+
+    if (filterQuery == "FF") {
+        return items.filter((item) => {
+            return (item.FF_InStock);
+        })
+    } else if (filterQuery == "EG") {
+        return items.filter((item) => {
+            return (item.EG_InStock);
+        })
+    } else { return items }
 }
+
 export const filterByStock = (items: SearchResult[], showOutOfStock: boolean): SearchResult[] => {
     if (!showOutOfStock) {
         return items.filter((item) => {

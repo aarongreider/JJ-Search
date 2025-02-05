@@ -28,15 +28,14 @@ img {
 ul.suggestorContainer {
   border-radius: 10px;
   padding: 0;
+  padding-bottom: 5px;
   margin: 0;
-}
-ul.suggestorContainer :hover {
-  background: rgba(0, 0, 0, 0.1);
 }
 ul.suggestorContainer li {
   width: 100%;
-  padding: 0;
+  padding: 5px 0;
   padding-left: 2px;
+  border-radius: 5px;
 }
 ul.suggestorContainer li button {
   -webkit-appearance: none;
@@ -48,8 +47,11 @@ ul.suggestorContainer li button {
   padding: 0;
   text-transform: lowercase;
 }
-ul.suggestorContainer li :hover {
-  background: none;
+ul.suggestorContainer li:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+ul.suggestorContainer li.selected {
+  background: rgba(0, 0, 0, 0.1);
 }
 ul.suggestorContainer li em {
   font-style: normal;
@@ -66,14 +68,16 @@ ul.suggestorContainer li .suggestorBrand {
   letter-spacing: -0.35px;
 }
 
-.checkbox {
-  background: white;
-  padding: 5px;
+#filterBar .filter {
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 500;
 }
-.checkbox.disabled {
+#filterBar .filter.disabled {
   background-color: rgb(219, 211, 199);
   color: rgb(107, 99, 86);
 }
-.checkbox.disabled p {
+#filterBar .filter.disabled p {
   color: grey;
 }/*# sourceMappingURL=App.css.map */

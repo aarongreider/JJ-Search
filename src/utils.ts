@@ -69,7 +69,7 @@ export const getSuggestors = async (searchTerm: string): Promise<Suggestor[]> =>
 
 export const sanitizeDepartmentOrCategory = (string: string) => {
     return string
-        .replace(/\bINTL\b/g, '')
+        //.replace(/\bINTL\b/g, '')
         .replace(/\bNF SS\b/g, '')
         .replace(/\bNF \b/g, '')
         .replace(/\bHBA\b/g, "HEALTH & BEAUTY")
@@ -114,6 +114,9 @@ export const getimageURL = (department: string): string => {
             break;
         case "EC RENTAL":
             renderDept = "International"
+            break;
+        case "N/A BEER & WINE":
+            renderDept = "Beer"
             break;
         default: renderDept = toTitleCase(department)
     }
