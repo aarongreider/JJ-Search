@@ -1,6 +1,10 @@
 import { getRequestOptions, PostType } from "./utils-fetch";
 
-type DataFetch = {
+export const NumResultsToFetch = 20
+export const NumResultsIncriment = 5
+
+
+export type DataFetch = {
     "@odata.context": string,
     "@odata.count": number
     "value": SearchResult[] | Suggestor[]
@@ -19,25 +23,6 @@ export type SearchResult = {
     Keywords: string
     Size: string
     UPC: string
-}
-
-export const getSearchData = async (searchTerm: string): Promise<SearchResult[]> => {
-    try {
-        //const response = await fetch("https://jjp-search.search.windows.net/indexes/jjsearchindex/docs/search?api-version=2024-11-01-preview", getRequestOptions());
-        const response = await fetch(
-            import.meta.env.PROD ?
-                "https://jjp-search.search.windows.net/indexes/jjsearchindex/docs/search?api-version=2024-11-01-preview" :
-                "/api/indexes/jjsearchindex/docs/search?api-version=2024-11-01-preview",
-            getRequestOptions(searchTerm, PostType.search)
-        );
-        const result = await response.text();
-        const parsedResult: DataFetch = JSON.parse(result)
-        console.log(parsedResult.value)
-        return parsedResult.value as SearchResult[]
-    } catch (error) {
-        console.error(error);
-        return []
-    };
 }
 
 export type Suggestor = {
