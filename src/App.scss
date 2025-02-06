@@ -1,3 +1,11 @@
+#root {
+    width: 100% !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 #searchControls {
     display: flex;
     gap: 13px;
@@ -7,7 +15,7 @@
     top: 0;
     z-index: 100;
 
-    > div {
+    >div {
         filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.1)) drop-shadow(1px 4px 5px rgba(0, 0, 0, 0.1));
     }
 }
@@ -87,7 +95,7 @@ ul.suggestorContainer {
 }
 
 #filterBar {
-    .filter {
+    .filterButton {
         height: 43px;
         background-color: white;
         padding: 10px;
@@ -103,5 +111,13 @@ ul.suggestorContainer {
                 color: grey;
             }
         }
+    }
+}
+
+
+@media only screen and (max-width: 400px) {
+    #root .filterButton {
+        padding: 3px 7px;
+        height: 30px !important;
     }
 }

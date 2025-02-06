@@ -19,7 +19,9 @@ export default function SearchControls({ searchParams, searchResults, totalServe
     const [displaySuggestors, setDisplaySuggestors] = useState<boolean>(false)
     const [activeSuggestorIndex, setActiveSuggestorIndex] = useState<number>(-1)
     const [departments, setDepartments] = useState<string[]>([])
+    const [navHeight, setNavHeight] = useState<number>(50)
     const searchBar = useRef<HTMLInputElement>(null)
+    
 
     useEffect(() => {
         setDisplaySuggestors(false)
@@ -40,7 +42,6 @@ export default function SearchControls({ searchParams, searchResults, totalServe
     useEffect(() => {
         setActiveSuggestorIndex(-1)
     }, [displaySuggestors])
-
 
     useEffect(() => {
         // handle incrimenting and decrementing the suggestor with arrow keys
@@ -74,6 +75,19 @@ export default function SearchControls({ searchParams, searchResults, totalServe
         }
     }, [searchParams.query])
 
+    useEffect(() => { // window size listener
+        const handleResize = () => {
+          setNavHeight(document.getElementById('nav')?.offsetHeight ?? 50)
+        };
+    
+        handleResize(); // Check on mount
+        window.addEventListener('resize', handleResize); // Check on resize
+    
+        return () => {
+          window.removeEventListener('resize', handleResize); // Cleanup
+        };
+      }, [window.innerWidth, window.innerHeight]);
+
     const selectSuggestor = (suggestor: Suggestor) => {
         setSearchParams({ ...searchParams, query: suggestor.Description.toLocaleLowerCase() })
         setTriggerSearch(!triggerSearch)
@@ -98,7 +112,7 @@ export default function SearchControls({ searchParams, searchResults, totalServe
 
     return <>
         {/* SEARCH CONTROLS */}
-        <div id='searchControls'>
+        <div id='searchControls' style={{top: `${navHeight}px`}}>
 
             {/* SEARCH BAR */}
             <div className='inputWrapper'>
@@ -144,7 +158,7 @@ export default function SearchControls({ searchParams, searchResults, totalServe
             <div id="filterBar" style={{ display: 'flex', flexDirection: 'row', gap: '10px', flexWrap: 'wrap', justifyContent: 'flex-end', }}>
 
                 {/* SORT */}
-                <select className="filter" onChange={(e) => { setSearchParams({ ...searchParams, sort: e.currentTarget.value }) }}>
+                <select className="filterButton" onChange={(e) => { setSearchParams({ ...searchParams, sort: e.currentTarget.value }) }}>
                     <option value="">Relevance</option>
                     <option value="price descending">Most $</option>
                     <option value="price ascending">Least $</option>
@@ -152,14 +166,14 @@ export default function SearchControls({ searchParams, searchResults, totalServe
                 </select>
 
                 {/* FILTER STORE */}
-                <select className="filter" onChange={(e) => { setSearchParams({ ...searchParams, store: e.currentTarget.value, showOOS: false }) }}>
+                <select className="filterButton" onChange={(e) => { setSearchParams({ ...searchParams, store: e.currentTarget.value, showOOS: false }) }}>
                     <option value="">Both Stores</option>
                     <option value="FF">Fairfield</option>
                     <option value="EG">Eastgate</option>
                 </select>
 
                 {/* FILTER DEPARTMENT */}
-                <select className="filter" value={searchParams.dept} onChange={(e) => { setSearchParams({ ...searchParams, dept: e.currentTarget.value }) }}>
+                <select className="filterButton" value={searchParams.dept} onChange={(e) => { setSearchParams({ ...searchParams, dept: e.currentTarget.value }) }}>
                     <option value="">All Departments</option>
                     {departments.map((department, index) => {
                         return <option key={index} value={department}>{department}</option>
@@ -167,7 +181,7 @@ export default function SearchControls({ searchParams, searchResults, totalServe
                 </select>
 
                 {/* TOGGLE SOLD OUT */}
-                <div className={`filter ${searchParams.store ? "disabled" : ""}`} style={{ display: 'flex', flexDirection: 'row', gap: '10px', flexWrap: 'wrap', alignItems: 'center', justifyContent: "flex-end" }}>
+                <div className={`filterButton ${searchParams.store ? "disabled" : ""}`} style={{ display: 'flex', flexDirection: 'row', gap: '10px', flexWrap: 'wrap', alignItems: 'center', justifyContent: "flex-end" }}>
                     <input type='checkbox'
                         disabled={searchParams.store ? true : false}
                         checked={searchParams.showOOS}

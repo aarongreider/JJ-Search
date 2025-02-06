@@ -1,3 +1,11 @@
+#root {
+  width: 100% !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 #searchControls {
   display: flex;
   gap: 13px;
@@ -77,17 +85,24 @@ ul.suggestorContainer li .suggestorBrand {
   letter-spacing: -0.35px;
 }
 
-#filterBar .filter {
+#filterBar .filterButton {
   height: 43px;
   background-color: white;
   padding: 10px;
   border-radius: 10px;
   font-weight: 500;
 }
-#filterBar .filter.disabled {
+#filterBar .filterButton.disabled {
   background-color: rgb(219, 211, 199);
   color: rgb(107, 99, 86);
 }
-#filterBar .filter.disabled p {
+#filterBar .filterButton.disabled p {
   color: grey;
+}
+
+@media only screen and (max-width: 400px) {
+  #root .filterButton {
+    padding: 3px 7px;
+    height: 30px !important;
+  }
 }/*# sourceMappingURL=App.css.map */
