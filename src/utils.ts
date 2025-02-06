@@ -1,7 +1,7 @@
 import { getRequestOptions, PostType } from "./utils-fetch";
 
-export const NumResultsToFetch = 20
-export const NumResultsIncriment = 5
+export const NumResultsToFetch = 1000
+export const NumResultsIncriment = 30
 
 
 export type DataFetch = {
@@ -31,6 +31,14 @@ export type Suggestor = {
     Department: string
     Description: string
     UPC: string
+}
+
+export type SearchParams = {
+    query: string,
+    sort: string,
+    dept: string,
+    store: string,
+    showOOS: boolean
 }
 
 export const getSuggestors = async (searchTerm: string): Promise<Suggestor[]> => {

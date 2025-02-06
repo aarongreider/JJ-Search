@@ -1,4 +1,4 @@
-import { DataFetch, NumResultsToFetch, SearchResult } from "./utils";
+import { DataFetch, NumResultsToFetch } from "./utils";
 
 export const PostType = { search: "Search", suggestor: "Suggestor" }
 

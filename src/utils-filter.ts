@@ -1,4 +1,19 @@
-import { SearchResult } from './utils'
+import { SearchParams, SearchResult } from './utils'
+
+
+export const orderItems = (params: SearchParams, items: SearchResult[]): SearchResult[] => {
+    //console.log(params);
+    
+    return sortItems(filterByStore(filterByDepartment(filterByStock(items, params.showOOS), params.dept), params.store), params.sort)
+}
+
+export const getPaginated = (params: SearchParams ,results: SearchResult[], slice: number): SearchResult[] => {
+    /* console.log(`before slice items`, orderItems(params, results));
+    console.log(`after slice items`,orderItems(params, results).slice(0, slice));
+    console.log(`all fetched results`, results.length); */
+    
+    return orderItems(params, results).slice(0, slice)
+}
 
 export const filterByStore = (items: SearchResult[], filterQuery: string): SearchResult[] => {
 
@@ -71,7 +86,6 @@ export const sortItems = (items: SearchResult[], sortQuery: string): SearchResul
         return items
     }
 }
-
 
 const cleanPrice = (price: string): number => {
     // Remove non-numeric characters except periods (.) using a regex
