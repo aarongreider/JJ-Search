@@ -92,6 +92,11 @@ ul.suggestorContainer li .suggestorBrand {
   padding: 10px;
   border-radius: 10px;
   font-weight: 500;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 #filterBar .filterButton.disabled {
   background-color: rgb(219, 211, 199);
@@ -99,6 +104,16 @@ ul.suggestorContainer li .suggestorBrand {
 }
 #filterBar .filterButton.disabled p {
   color: grey;
+}
+
+select {
+  -moz-appearance: none;
+       appearance: none;
+  -webkit-appearance: none;
+}
+
+.chevDown {
+  transform: rotate(90deg) translateX(1.3px);
 }
 
 @media only screen and (max-width: 500px) {
