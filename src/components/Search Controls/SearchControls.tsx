@@ -111,11 +111,8 @@ export default function SearchControls({ searchParams, searchResults, totalServe
 
 
     return <>
-        {/* SEARCH CONTROLS */}
-        <div id='searchControls' style={{top: `${navHeight}px`}}>
-
-            {/* SEARCH BAR */}
-            <div className='inputWrapper'>
+    {/* SEARCH BAR */}
+            <div className='inputWrapper' style={{top: `${navHeight + 10}px`}}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '3px', width: '100%', position: 'relative', marginBottom: `${displaySuggestors ? '5px' : 0}` }}>
                     <span className="material-symbols-outlined" style={{ cursor: 'default' }}>search</span>
                     <input type="text" ref={searchBar} style={{ background: "none", border: "none", outline: 'none', width: '100%', paddingLeft: '2px' }}
@@ -153,6 +150,10 @@ export default function SearchControls({ searchParams, searchResults, totalServe
                     }
                 </ul>}
             </div>
+        {/* SEARCH CONTROLS */}
+        <div id='searchControls'>
+
+            
 
             {/* FILTERING */}
             <div id="filterBar" style={{ display: 'flex', flexDirection: 'row', gap: '10px', flexWrap: 'wrap', justifyContent: 'flex-end', }}>

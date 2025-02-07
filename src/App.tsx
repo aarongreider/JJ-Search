@@ -26,7 +26,7 @@ export default function App() {
 
   useEffect(() => {
     import.meta.env.PROD ? undefined : setDevelopmentStyles()
-    console.log("version .8");
+    console.log("version .9");
     setTimeout(setWPStyles, 500);
   }, [])
 
