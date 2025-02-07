@@ -20,12 +20,16 @@ const processURL = (): string => {
     }
 }
 
+const escapeSpecialChars = (str: string) => {
+    return str.replace(/[-\/\\^$*+?.()|[\]{}'"]/g, '');
+}
 export const getRequestOptions = (searchTerm: string, postType: string, skip?: number): RequestInit => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("api-key", processURL());
     
     let raw;
+    searchTerm = escapeSpecialChars(searchTerm)
 
     if (postType == PostType.search) {
         raw = JSON.stringify({
@@ -65,6 +69,7 @@ export const getRequestOptions = (searchTerm: string, postType: string, skip?: n
 }
 
 export const getSearchData = async (searchTerm: string, skip?: number): Promise<DataFetch> => {
+    
     try {
         //const response = await fetch("https://jjp-search.search.windows.net/indexes/jjsearchindex/docs/search?api-version=2024-11-01-preview", getRequestOptions());
         const response = await fetch(

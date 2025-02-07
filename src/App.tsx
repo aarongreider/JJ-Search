@@ -20,16 +20,23 @@ export default function App() {
   const [searchResults, setSearchResult] = useState<SearchResult[]>([])
   const [paginatedResults, setPaginatedResults] = useState<SearchResult[]>([])
   const [numResultsToDisplay, setNumResultsToDisplay] = useState<number>(NumResultsIncriment)
-  const [totalServerMatches, setTotalServerMatches] = useState<number>(0)
+  const [totalServerMatches, setTotalServerMatches] = useState<number>(-1)
 
   const [numItemsOutOfStock, setNumItemsOutOfStock] = useState<number>(0)
 
+  const [userIP, setUserIP] = useState<string>()
   const [jcfDestroyed, setJcfDestroyed] = useState<boolean>(false)
 
   useEffect(() => {
     import.meta.env.PROD ? undefined : setDevelopmentStyles()
     console.log("version .9");
     setTimeout(setWPStyles, 500);
+
+    // get user IP
+    fetch('https://api64.ipify.org?format=json')
+      .then(response => response.json())
+      .then(data => { console.log('User IP:', data.ip); setUserIP(data.ip) })
+      .catch(error => console.error('Error fetching IP:', error));
   }, [])
 
   useEffect(() => { // JCF Setting up the window.onload event inside useEffect
@@ -107,30 +114,33 @@ export default function App() {
   }, [searchResults, searchParams, numResultsToDisplay])
 
   useEffect(() => {
-    getSearchResult(false)
+    getSearchResult(false, true)
     setNumResultsToDisplay(NumResultsIncriment)
   }, [triggerSearch])
 
 
-  const getSearchResult = async (append: boolean) => {
+  const getSearchResult = async (append: boolean, freshSearch?: boolean) => {
     try {
-      if (append) {
-        setLoading(true)
-        const data = await fetchSearchData(searchParams.query, searchResults.length)
-        setSearchResult([...searchResults, ...data.value as SearchResult[]]);
-        setLoading(false)
-      } else {
-        setInitialResultsLoaded(false)
-        setLoading(true)
-        const data = await fetchSearchData(searchParams.query)
-        setSearchResult(data.value as SearchResult[]);
-        setTotalServerMatches(data['@odata.count'])
-        setInitialResultsLoaded(true)
-        setLoading(false)
+      if (freshSearch) {
+        if (append) {
+          setLoading(true)
+          const data = await fetchSearchData(searchParams.query, searchResults.length)
+          setSearchResult([...searchResults, ...data.value as SearchResult[]]);
+          setLoading(false)
+        } else {
+          setInitialResultsLoaded(false)
+          setLoading(true)
+          const data = await fetchSearchData(searchParams.query)
+          setSearchResult(data.value as SearchResult[]);
+          setTotalServerMatches(data['@odata.count'])
+          setInitialResultsLoaded(true)
+          setLoading(false)
+        }
       }
     } catch (e) {
       console.log("Error fetching search data", e);
     }
+
   }
 
 
@@ -152,7 +162,7 @@ export default function App() {
         {/* SEARCH RESULTS */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
           {initialResultsLoaded ? paginatedResults.map((result, index) => {
-            return <Card key={index} searchResult={result}></Card>
+            return <Card key={index} searchResult={result} userIP={userIP ? userIP : ''}></Card>
           }) : undefined}
         </div>
 

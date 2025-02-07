@@ -129,6 +129,9 @@ ul.suggestorContainer {
 select {
     appearance: none;
     -webkit-appearance: none;
+    background: none; 
+    border: none;
+    outline: none;
 }
  .chevDown {
             transform: rotate(90deg) translateX(1.3px);

@@ -1,7 +1,7 @@
 .resultCard {
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  gap: 14px;
   width: 100%;
   min-width: 250px;
   background: white;
@@ -17,6 +17,7 @@
 .resultCard .cardText {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 5px;
   width: 100%;
 }
@@ -43,18 +44,23 @@
 .resultCard .cardText .flex {
   width: 100%;
 }
-.resultCard .cardText .flex .stockIndicator {
-  /* position: absolute;
-  bottom: -2%;
-  left: -3%; */
-  transform: translateY(-2px);
-  padding: 3px 7px 1px;
+.resultCard .stockIndicator {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1px;
+  padding: 3px 2px 1px 7px;
   margin: 0;
   border-radius: 50px;
-  font-weight: 900;
+  font-size: 14px;
+  font-weight: 900 !important;
   text-transform: uppercase;
   color: white;
   width: -moz-min-content;
   width: min-content;
   white-space: nowrap;
+}
+.resultCard .stockIndicator span {
+  font-size: 16px;
+  transform: translateY(-0.75px);
 }/*# sourceMappingURL=card.css.map */

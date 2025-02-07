@@ -52,7 +52,7 @@ export const getSuggestors = async (searchTerm: string): Promise<Suggestor[]> =>
         );
         const result = await response.text();
         const parsedResult: DataFetch = JSON.parse(result)
-        console.log(parsedResult.value)
+        //console.log(parsedResult.value)
         return parsedResult.value as Suggestor[]
     } catch (error) {
         console.error(error);

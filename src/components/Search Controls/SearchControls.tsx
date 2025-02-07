@@ -14,7 +14,7 @@ interface SearchControlsProps {
     setSearchParams: (params: SearchParams) => void
 }
 
-export default function SearchControls({ searchParams, searchResults, totalServerMatches, numUp, numItemsOutOfStock, triggerSearch, setTriggerSearch, setSearchParams }: SearchControlsProps) {
+export default function SearchControls({ searchParams, searchResults, numUp, numItemsOutOfStock, triggerSearch, setTriggerSearch, setSearchParams }: SearchControlsProps) {
     const [suggestors, setSuggestors] = useState<Suggestor[]>([])
     const [displaySuggestors, setDisplaySuggestors] = useState<boolean>(false)
     const [activeSuggestorIndex, setActiveSuggestorIndex] = useState<number>(-1)
@@ -136,18 +136,17 @@ export default function SearchControls({ searchParams, searchResults, totalServe
             {/* SUGGESTORS */}
             {displaySuggestors && <ul className='suggestorContainer' style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                 {displaySuggestors ? suggestors.map((suggestor, index) => {
-                    return <>
-                        <li key={index} className={`${index == activeSuggestorIndex ? 'selected' : ''}`} style={{ display: 'flex', alignItems: 'center', gap: '3px', width: '100%' }} onClick={() => {
-                            selectSuggestor(suggestor)
-                        }}>
-                            <span style={{ color: 'rgb(172, 172, 172)' }} className="material-symbols-outlined">search</span>
-                            <button key={index} className="suggestor" style={{ whiteSpace: "nowrap" }}
-                                dangerouslySetInnerHTML={{
-                                    __html: suggestor['@search.text'],
-                                }} />
-                            <span className='suggestorBrand'>{suggestor.Brand.toLocaleLowerCase()}</span>
-                        </li>
-                    </>
+                    return <li key={index} className={`${index == activeSuggestorIndex ? 'selected' : ''}`} style={{ display: 'flex', alignItems: 'center', gap: '3px', width: '100%' }} onClick={() => {
+                        selectSuggestor(suggestor)
+                    }}>
+                        <span style={{ color: 'rgb(172, 172, 172)' }} className="material-symbols-outlined">search</span>
+                        <button key={index} className="suggestor" style={{ whiteSpace: "nowrap" }}
+                            dangerouslySetInnerHTML={{
+                                __html: suggestor['@search.text'],
+                            }} />
+                        <span className='suggestorBrand'>{suggestor.Brand.toLocaleLowerCase()}</span>
+                    </li>
+
                 }) : undefined
                 }
             </ul>}
@@ -184,9 +183,9 @@ export default function SearchControls({ searchParams, searchResults, totalServe
                 {/* FILTER DEPARTMENT */}
                 <div className="filterButton" onClick={() => { deptRef?.current?.showPicker() }}>
                     <select ref={deptRef} value={searchParams.dept} onChange={(e) => { setSearchParams({ ...searchParams, dept: e.currentTarget.value }) }}>
-                        <option value="">All Departments</option>
+                        <option key="0" value="">All Departments</option>
                         {departments.map((department, index) => {
-                            return <option key={index} value={department}>{department}</option>
+                            return <option key={index + 1} value={department}>{department}</option>
                         })}
                     </select>
                     <span className="material-symbols-outlined chevDown">chevron_right</span>
@@ -209,7 +208,7 @@ export default function SearchControls({ searchParams, searchResults, totalServe
 
             {/* NUMBER OF RESULTS */}
             <p style={{ width: '100%', textAlign: 'right', margin: 0, padding: '0 6px', fontSize: '14px', fontStyle: 'italic', fontWeight: 500, letterSpacing: '-.1px' }}>
-                Showing {numUp} of {totalServerMatches} Results. {numItemsOutOfStock} Items Out of Stock.
+                Showing {numUp} Results. {numItemsOutOfStock} Items Out of Stock.
             </p>
         </div>
     </>
