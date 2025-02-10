@@ -43,7 +43,6 @@ export type SearchParams = {
 
 export const getSuggestors = async (searchTerm: string): Promise<Suggestor[]> => {
     try {
-        //const response = await fetch("https://jjp-search.search.windows.net/indexes/jjsearchindex/docs/search?api-version=2024-11-01-preview", getRequestOptions());
         const response = await fetch(
             import.meta.env.PROD ?
                 "https://jjp-search.search.windows.net/indexes('jjsearchindex')/docs/search.post.suggest?api-version=2024-11-01-preview" :
@@ -52,8 +51,17 @@ export const getSuggestors = async (searchTerm: string): Promise<Suggestor[]> =>
         );
         const result = await response.text();
         const parsedResult: DataFetch = JSON.parse(result)
+        
+        const seen = new Set<string>();
+        const filteredSuggestors = parsedResult.value.filter((suggestor) => {
+            if (seen.has(suggestor.Description))
+                return false
+            seen.add(suggestor.Description)
+            return true
+        })
         //console.log(parsedResult.value)
-        return parsedResult.value as Suggestor[]
+
+        return filteredSuggestors.slice(0,10) as Suggestor[]
     } catch (error) {
         console.error(error);
         return []

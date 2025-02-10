@@ -54,7 +54,7 @@ export const getRequestOptions = (searchTerm: string, postType: string, skip?: n
             "searchFields": "Description",
             "select": "UPC,Description,Brand,Department",
             "suggesterName": "sg-itemsearch",
-            "top": 10
+            "top": 100
           });
     }
 
