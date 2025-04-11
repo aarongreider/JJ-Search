@@ -80,7 +80,7 @@ export const getSearchData = async (searchTerm: string, skip?: number): Promise<
         );
         const result = await response.text();
         const parsedResult: DataFetch = JSON.parse(result)
-        //console.log(parsedResult)
+        console.log(parsedResult)
         return parsedResult as DataFetch
     } catch (error) {
         console.error(error);

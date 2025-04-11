@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { NumResultsIncriment, SearchParams, SearchResult, setDevelopmentStyles, setWPStyles } from './utils'
+import { NumResultsIncriment, NumResultsToFetch, SearchParams, SearchResult, setDevelopmentStyles, setWPStyles } from './utils'
 import { getSearchData as fetchSearchData } from './utils-fetch'
-import { orderItems, getPaginated } from './utils-filter'
+import { orderItems, getPaginated, filterByStore, filterByDepartment } from './utils-filter'
 import { Card } from './components/Card/Card'
 import SearchControls from './components/Search Controls/SearchControls'
 import './App.css'
@@ -97,18 +97,26 @@ export default function App() {
   useEffect(() => {
     const filteredItems = orderItems(searchParams, searchResults) // untruncated unsliced
 
-    if (searchResults.length % 1000 > 0) {
+    if (searchResults.length % NumResultsToFetch > 0) {
       // if total fetched has a remainder, then all results have been fetched
+      //console.log(searchResults.length % NumResultsToFetch);
     }
     else if ((numResultsToDisplay >= searchResults.length - NumResultsIncriment)) {
+      //console.log("condition a", numResultsToDisplay >= searchResults.length - NumResultsIncriment);
       getSearchResult(true)
     } else if ((filteredItems.length <= numResultsToDisplay)) {
+      //console.log("condition b", filteredItems.length <= numResultsToDisplay);
       getSearchResult(true)
     }
 
     setPaginatedResults(getPaginated(searchParams, searchResults, numResultsToDisplay))
 
-    let outOfStock = searchResults.filter((result) => result.FF_InStock === false && result.EG_InStock === false).length
+    //let outOfStock = searchResults.filter((result) => result.FF_InStock === false && result.EG_InStock === false).length
+    // a variation of orderItems() that does not consider sorting or in-stock filtering
+    let outOfStock =
+      filterByStore(filterByDepartment(searchResults, searchParams.dept), searchParams.store)
+        .filter((result) => result.FF_InStock === false && result.EG_InStock === false).length
+
     setNumItemsOutOfStock(outOfStock)
 
   }, [searchResults, searchParams, numResultsToDisplay])
@@ -119,7 +127,7 @@ export default function App() {
   }, [triggerSearch])
 
 
-  const getSearchResult = async (append: boolean, freshSearch?: boolean) => {
+  const getSearchResult = async (append: boolean, freshSearch: boolean = true) => {
     try {
       if (freshSearch) {
         if (append) {
@@ -168,7 +176,7 @@ export default function App() {
 
         {loading ?
           <LoadingIndicator />
-          : searchResults.length <= totalServerMatches && (orderItems(searchParams, searchResults).length > paginatedResults.length)
+          : searchResults.length < totalServerMatches || (orderItems(searchParams, searchResults).length != paginatedResults.length)
             ? <button style={{
               display: 'flex',
               alignItems: 'center',
