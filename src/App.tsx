@@ -29,13 +29,13 @@ export default function App() {
 
   useEffect(() => {
     import.meta.env.PROD ? undefined : setDevelopmentStyles()
-    console.log("version .9");
+    console.log("version 1.0");
     setTimeout(setWPStyles, 500);
 
     // get user IP
     fetch('https://api64.ipify.org?format=json')
       .then(response => response.json())
-      .then(data => { console.log('User IP:', data.ip); setUserIP(data.ip) })
+      .then(data => { /* console.log('User IP:', data.ip); */ setUserIP(data.ip) })
       .catch(error => console.error('Error fetching IP:', error));
   }, [])
 
@@ -69,7 +69,7 @@ export default function App() {
             }
           })
         } catch (error) {
-          console.log(error);
+          //console.log(error);
         }
       }
     }

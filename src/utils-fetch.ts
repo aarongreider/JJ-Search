@@ -2,7 +2,7 @@ import { DataFetch, NumResultsToFetch } from "./utils";
 
 export const PostType = { search: "Search", suggestor: "Suggestor" }
 
-const processURL = (): string => {
+/* const processURL = (): string => {
     const pathname = window.location.hash;
     //const pathname = "https://junglejims.com/item-search-new/#key";
     const cleanPath = pathname.replace(/\//g, '');
@@ -18,7 +18,7 @@ const processURL = (): string => {
         //console.log("No valid segment found.");
         return ""
     }
-}
+} */
 
 const escapeSpecialChars = (str: string) => {
     return str.replace(/[-\/\\^$*+?.()|[\]{}'"]/g, '');
@@ -26,7 +26,7 @@ const escapeSpecialChars = (str: string) => {
 export const getRequestOptions = (searchTerm: string, postType: string, skip?: number): RequestInit => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("api-key", processURL());
+    myHeaders.append("api-key", "bW5kCyzN1qPRzXAtU4GD9YGpjj49GZnkYd9jHoBTOMAzSeBfrYuj");
     
     let raw;
     searchTerm = escapeSpecialChars(searchTerm)
