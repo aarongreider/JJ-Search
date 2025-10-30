@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { NumResultsIncriment, NumResultsToFetch, SearchParams, SearchResult, setDevelopmentStyles, setWPStyles } from './utils'
+import { NumResultsIncriment, SearchParams, SearchResult, setDevelopmentStyles, setWPStyles } from './utils'
 import { getSearchData as fetchSearchData } from './utils-fetch'
 import { orderItems, getPaginated, filterByStore, filterByDepartment } from './utils-filter'
 import { Card } from './components/Card/Card'
@@ -14,6 +14,7 @@ export default function App() {
 
   const [initialResultsLoaded, setInitialResultsLoaded] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
+  const [hasMoreResults, setHasMoreResults] = useState<boolean>(false)
 
   const [triggerSearch, setTriggerSearch] = useState<boolean>(false)
 
@@ -61,7 +62,7 @@ export default function App() {
             // Check if instance exists and destroy it
             if (jcfInstance) {
               jcfInstance.destroy();
-              console.log("Destroying JCF Instance D:<", jcfInstance);
+              //console.log("Destroying JCF Instance D:<", jcfInstance);
               setJcfDestroyed(true)
             } else {
               //console.log("NO INSTANCE AHHHH");
@@ -94,51 +95,50 @@ export default function App() {
     console.log(`searchResults.length >= totalServerMatches,`, searchResults.length, totalServerMatches, searchResults.length >= totalServerMatches);
   }) */
 
-  useEffect(() => {
+  useEffect(() => { // FETCH EFFECT, evaluate if more items need fetched, or if we're at the end
     const filteredItems = orderItems(searchParams, searchResults) // untruncated unsliced
-
-    if (searchResults.length % NumResultsToFetch > 0) {
-      // if total fetched has a remainder, then all results have been fetched
-      //console.log(searchResults.length % NumResultsToFetch);
-    }
-    else if ((numResultsToDisplay >= searchResults.length - NumResultsIncriment)) {
-      //console.log("condition a", numResultsToDisplay >= searchResults.length - NumResultsIncriment);
+    const resultsAreAllDisplayed = numResultsToDisplay >= searchResults?.length
+    const notEnoughFilteredResults = filteredItems.length < numResultsToDisplay
+    const needMoreResults = hasMoreResults && (resultsAreAllDisplayed || notEnoughFilteredResults)
+    console.log("needMoreResults", needMoreResults, {hasMoreResults, filteredLength: filteredItems.length, numResultsToDisplay, results: searchResults?.length, totalServerMatches, resultsAreAllDisplayed, notEnoughFilteredResults});
+    if (needMoreResults) { // if the number of filtered items is less than the number of results to display, then we've run out of filtered items to display and need to fetch more. 
       getSearchResult(true)
-    } else if ((filteredItems.length <= numResultsToDisplay)) {
-      //console.log("condition b", filteredItems.length <= numResultsToDisplay);
-      getSearchResult(true)
+    } else {
+      console.log("no search results updated")
     }
+  }, [numResultsToDisplay])
 
+  useEffect(() => { // FILTER + PAGINATION
     setPaginatedResults(getPaginated(searchParams, searchResults, numResultsToDisplay))
 
-    //let outOfStock = searchResults.filter((result) => result.FF_InStock === false && result.EG_InStock === false).length
     // a variation of orderItems() that does not consider sorting or in-stock filtering
-    let outOfStock =
+    let outOfStockCount =
       filterByStore(filterByDepartment(searchResults, searchParams.dept), searchParams.store)
         .filter((result) => result.FF_InStock === false && result.EG_InStock === false).length
 
-    setNumItemsOutOfStock(outOfStock)
-
+    setNumItemsOutOfStock(outOfStockCount)
   }, [searchResults, searchParams, numResultsToDisplay])
 
   useEffect(() => {
+    if (!searchParams.query) return
     getSearchResult(false, true)
     setNumResultsToDisplay(NumResultsIncriment)
   }, [triggerSearch])
 
 
   const getSearchResult = async (append: boolean, freshSearch: boolean = true) => {
+    let data
     try {
       if (freshSearch) {
         if (append) {
           setLoading(true)
-          const data = await fetchSearchData(searchParams.query, searchResults.length)
+          data = await fetchSearchData(searchParams.query, searchResults.length)
           setSearchResult([...searchResults, ...data.value as SearchResult[]]);
           setLoading(false)
         } else {
           setInitialResultsLoaded(false)
           setLoading(true)
-          const data = await fetchSearchData(searchParams.query)
+          data = await fetchSearchData(searchParams.query)
           setSearchResult(data.value as SearchResult[]);
           setTotalServerMatches(data['@odata.count'])
           setInitialResultsLoaded(true)
@@ -148,7 +148,8 @@ export default function App() {
     } catch (e) {
       console.log("Error fetching search data", e);
     }
-
+    if (data)
+      setHasMoreResults([...searchResults, ...data.value as SearchResult[]].length < data['@odata.count'])
   }
 
 
@@ -174,9 +175,9 @@ export default function App() {
           }) : undefined}
         </div>
 
-        {loading ?
+        {loading && searchResults?.length > 0 ?
           <LoadingIndicator />
-          : searchResults.length < totalServerMatches || (orderItems(searchParams, searchResults).length != paginatedResults.length)
+          : hasMoreResults || (orderItems(searchParams, searchResults).length != paginatedResults.length)
             ? <button style={{
               display: 'flex',
               alignItems: 'center',

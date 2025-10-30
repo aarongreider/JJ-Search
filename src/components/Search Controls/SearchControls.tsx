@@ -14,7 +14,7 @@ interface SearchControlsProps {
     setSearchParams: (params: SearchParams) => void
 }
 
-export default function SearchControls({ searchParams, searchResults, numUp, numItemsOutOfStock, triggerSearch, setTriggerSearch, setSearchParams }: SearchControlsProps) {
+export default function SearchControls({ searchParams, searchResults, totalServerMatches, numUp, numItemsOutOfStock, triggerSearch, setTriggerSearch, setSearchParams }: SearchControlsProps) {
     const [suggestors, setSuggestors] = useState<Suggestor[]>([])
     const [displaySuggestors, setDisplaySuggestors] = useState<boolean>(false)
     const [activeSuggestorIndex, setActiveSuggestorIndex] = useState<number>(-1)
@@ -207,9 +207,9 @@ export default function SearchControls({ searchParams, searchResults, numUp, num
             </div>
 
             {/* NUMBER OF RESULTS */}
-            <p style={{ width: '100%', textAlign: 'right', margin: 0, padding: '0 6px', fontSize: '14px', fontStyle: 'italic', fontWeight: 500, letterSpacing: '-.1px' }}>
-                Showing {numUp} Results. {numItemsOutOfStock} Items Out of Stock.
-            </p>
+            {totalServerMatches - numItemsOutOfStock > 0 ? <p style={{ width: '100%', textAlign: 'right', margin: 0, padding: '0 6px', fontSize: '14px', fontStyle: 'italic', fontWeight: 500, letterSpacing: '-.1px' }}>
+                Showing {numUp} of {totalServerMatches/*  - numItemsOutOfStock */} Results{/* {numItemsOutOfStock} Items Out of Stock. */}
+            </p> : undefined}
         </div>
     </>
 
