@@ -100,7 +100,7 @@ export default function App() {
     const resultsAreAllDisplayed = numResultsToDisplay >= searchResults?.length
     const notEnoughFilteredResults = filteredItems.length < numResultsToDisplay
     const needMoreResults = hasMoreResults && (resultsAreAllDisplayed || notEnoughFilteredResults)
-    console.log("needMoreResults", needMoreResults, {hasMoreResults, filteredLength: filteredItems.length, numResultsToDisplay, results: searchResults?.length, totalServerMatches, resultsAreAllDisplayed, notEnoughFilteredResults});
+    console.log("needMoreResults", needMoreResults, { hasMoreResults, filteredLength: filteredItems.length, numResultsToDisplay, results: searchResults?.length, totalServerMatches, resultsAreAllDisplayed, notEnoughFilteredResults });
     if (needMoreResults) { // if the number of filtered items is less than the number of results to display, then we've run out of filtered items to display and need to fetch more. 
       getSearchResult(true)
     } else {
@@ -175,22 +175,33 @@ export default function App() {
           }) : undefined}
         </div>
 
-        {loading && searchResults?.length > 0 ?
-          <LoadingIndicator />
-          : hasMoreResults || (orderItems(searchParams, searchResults).length != paginatedResults.length)
-            ? <button style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              background: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              padding: '10px 10px 10px 20px'
-            }}
-              onClick={() => {
-                setNumResultsToDisplay(numResultsToDisplay + NumResultsIncriment)
-              }}> Load More <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>arrow_downward</span></button>
-            : <p>no more items to load</p>
+        {initialResultsLoaded ?
+          loading && searchResults?.length > 0
+            ? <LoadingIndicator />
+            : hasMoreResults || (orderItems(searchParams, searchResults).length != paginatedResults.length)
+              ? <button style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                background: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                padding: '10px 10px 10px 20px'
+              }}
+                onClick={() => {
+                  setNumResultsToDisplay(numResultsToDisplay + NumResultsIncriment)
+                }}> Load More <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>arrow_downward</span></button>
+              : <p>no more items to load</p>
+          : <>
+            <img src="https://junglejims.com/wp-content/uploads/Jungle_Genie.svg"
+              style={{
+                margin: 0,
+                width: 'min-content',
+                height: '220px',
+                filter: 'drop-shadow(2px 4px 10px rgba(0, 0, 0, .1)) drop-shadow(3px 4px 50px rgba(0, 0, 0, .13))',
+              }} />
+            <i style={{textAlign: 'center'}}>The Product Genie knows all,<br></br>you just have to ask.</i>
+          </>
         }
 
 
