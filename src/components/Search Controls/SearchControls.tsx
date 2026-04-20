@@ -114,7 +114,9 @@ export default function SearchControls({ searchParams, searchResults, totalServe
 
     return <>
         {/* SEARCH BAR */}
+        <p></p>
         <div className='inputWrapper' style={{ top: `${navHeight + 10}px` }}>
+            <i style={{margin: -1, position: "absolute", alignSelf:"flex-end", top: -23, fontSize: '14px', fontStyle: 'italic', fontWeight: 500, letterSpacing: '-.1px' }}>Inventory updated every 24 hours.</i>
             <div style={{ display: 'flex', alignItems: 'center', gap: '3px', width: '100%', position: 'relative', marginBottom: `${displaySuggestors ? '5px' : 0}` }}>
                 <span className="material-symbols-outlined" style={{ cursor: 'default' }}>search</span>
                 <input type="text" ref={searchBar} style={{ background: "none", border: "none", outline: 'none', width: '100%', paddingLeft: '2px' }}
